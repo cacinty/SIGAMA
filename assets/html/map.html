@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Firebase Leaflet Map with Images</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .popup-img {
+            max-width: 150px;
+            max-height: 150px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .popup-btn {
+            margin-top: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiyYQWfd8fJAtqOAMjIHdKnGlk3aQwvoI",
+            authDomain: "reacnative-2025-3da61.firebaseapp.com",
+            databaseURL: "https://reacnative-2025-3da61-default-rtdb.firebaseio.com",
+            projectId: "reacnative-2025-3da61",
+            storageBucket: "reacnative-2025-3da61.appspot.com",
+            messagingSenderId: "654058783309",
+            appId: "1:654058783309:web:8afd63fd93e4a50fbad204"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const map = L.map('map').setView([-7.7956, 110.3695], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const pointsRef = database.ref("/laporan_kerusakan");
+        const markers = {}; // Simpan marker agar bisa dihapus langsung
+
+        // Fungsi hapus point
+        function deletePoint(key) {
+            if (confirm("Yakin akan menghapus laporan ini?")) {
+                pointsRef.child(key).remove()
+                    .then(() => {
+                        // Hapus marker dari map
+                        if (markers[key]) {
+                            map.removeLayer(markers[key]);
+                            delete markers[key];
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+
+        // Listen data
+        pointsRef.on('value', snapshot => {
+            const data = snapshot.val();
+
+            // Hapus semua marker lama sebelum update
+            Object.values(markers).forEach(marker => map.removeLayer(marker));
+            Object.keys(markers).forEach(k => delete markers[k]);
+
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    const point = data[key];
+
+                    if (point.coordinates && typeof point.coordinates === 'object') {
+                        const lat = parseFloat(point.coordinates.latitude);
+                        const lng = parseFloat(point.coordinates.longitude);
+
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            const marker = L.marker([lat, lng]).addTo(map);
+                            markers[key] = marker; // simpan marker
+
+                            const popupContent = `
+                                <div>
+                                    <p>${point.deskripsi || ''}</p>
+                                    <p>Lat: ${lat}, Lng: ${lng}</p>
+                                    <button class="popup-btn" onclick="deletePoint('${key}')">
+                                        <i class="fa-solid fa-trash"></i> Hapus Laporan
+                                    </button>
+                                </div>
+                            `;
+                            marker.bindPopup(popupContent);
+                        } else {
+                            console.warn("Invalid coordinates for point:", key, point.coordinates);
+                        }
+                    } else {
+                        console.warn("Coordinates not found for point:", key, point.coordinates);
+                    }
+                });
+            }
+        }, error => {
+            console.error("Read failed:", error);
+        });
+    </script>
+</body>
+</html>

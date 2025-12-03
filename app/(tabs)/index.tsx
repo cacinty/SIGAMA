@@ -1,98 +1,160 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Colors, Fonts } from '@/constants/theme';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <SafeAreaView style={styles.safeArea}>
+      <ImageBackground
+        source={require('@/assets/images/balairung.jpg')}
+        style={styles.container}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay}>
+        <ThemedText style={styles.mainTitle}>SiGaMa</ThemedText>
+        <ThemedText style={styles.subTitle}>Sistem Laporan Gadjah Mada</ThemedText>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
+        <Image
+          source={require('@/assets/images/simaster.png')}
+          style={styles.logo}
+          contentFit="contain"
+        />
+
+        <ThemedText style={styles.tagline}>
+          "Laporkan setiap kerusakan di sekitar Anda untuk lingkungan UGM yang lebih baik"
         </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, styles.primaryButton]}
+            onPress={() => router.push('/explore')}
+          >
+            <ThemedText style={styles.primaryButtonText}>Buat Laporan Baru</ThemedText>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, styles.secondaryButton]}
+            onPress={() => router.push('/mapwebview')}
+          >
+            <ThemedText style={styles.secondaryButtonText}>Lihat Titik Kerusakan</ThemedText>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#004A74', // Dark Blue
+  },
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 15,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  mainTitle: {
+    fontSize: 33,
+    fontWeight: 'bold',
+    textAlign: 'center',
+     marginTop: 20, // Adjusted margin
+    color: '#FFD700', // Yellow
+    fontFamily: Fonts.serif,
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 7, height: 7 },
+    textShadowRadius: 8,
+    letterSpacing: 2,
+    marginBottom: 5,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  subTitle: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#004A74', // White
+    fontFamily: Fonts.serif,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
+    marginBottom: 20, // Adjusted margin
+  },
+  logo: {
+    width: 170, // Slightly increased
+    height: 170, // Slightly increased
+    marginBottom: 35, // Adjusted margin
+    marginTop: 20, // Adjusted margin
+    borderRadius: 80, // Made circular
+    borderWidth: 3,
+    borderColor: '#FFD700', // Yellow border
+    shadowColor: '#000', // Added shadow for depth
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8, // Android shadow
+  },
+  tagline: {
+    fontSize: 15, // Increased font size
+    textAlign: 'center',
+    marginBottom: 40, // Increased margin
+    marginTop: 40, // Added margin to move tagline down
+    color: '#004A74', // White
+    paddingHorizontal: 25, // Adjusted padding
+    lineHeight: 24, // Added line height
+    fontFamily: Fonts.serif,
+  },
+  buttonContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 80, // Adjusted top margin
+  },
+  button: {
+    width: '90%',
+    paddingVertical: 18, // Increased padding
+    borderRadius: 12, // Increased border radius
+    alignItems: 'center',
+    marginBottom: 15, // Increased margin
+    // Added shadow for buttons
+    shadowColor: '#00000025',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // Android shadow
+  },
+  primaryButton: {
+    backgroundColor: '#FFD700', // Yellow
+  },
+  primaryButtonText: {
+    color: '#004A74', // Dark Blue
+    fontSize: 18, // Increased font size
+    fontWeight: 'bold',
+    fontFamily: Fonts.sans,
+  },
+  secondaryButton: {
+    borderWidth: 2, // Increased border width
+    borderColor: '#FFD700', // Yellow
+    backgroundColor: 'rgba(255, 255, 255, 0.1)', // Subtle transparent background
+  },
+  secondaryButtonText: {
+    color: '#FFD700', // Yellow
+    fontSize: 18, // Increased font size
+    fontWeight: 'bold',
+    fontFamily: Fonts.sans,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(251, 247, 247, 0.55)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
