@@ -52,3 +52,37 @@ Join our community of developers creating universal apps.
 =======
 # SIGAMA
 
+🔵🚀 NAMA PRODUK
+SIGAMA — Sistem Pelaporan Kerusakan Berbasis Lokasi UGM
+Aplikasi Pelaporan Kerusakan Berbasis Lokasi untuk Kampus UGM.
+
+📝📌 DESKRIPSI PRODUK
+SIGAMA adalah aplikasi pelaporan kerusakan fasilitas kampus yang memudahkan mahasiswa, dosen, dan tenaga kependidikan untuk mengirim laporan berbasis lokasi secara cepat.
+📍 Aplikasi ini memanfaatkan GPS untuk mendapatkan koordinat otomatis.
+📷 Mendukung upload foto kerusakan.
+🔥 Data laporan disimpan menggunakan Firebase Realtime Database & Storage.
+🗺️ Semua laporan ditampilkan pada peta interaktif menggunakan Leaflet dan Google Maps, sehingga pengelola kampus dapat memantau kerusakan secara efisien dalam satu tampilan.
+
+⚙️ Komponen Pembangun Produk
+ 1. Aplikasi Mobile
+📦 React Native + Expo
+📍 Expo Location → pengambilan GPS otomatis
+📷 Expo Image Picker → upload foto
+🔥 Firebase SDK → koneksi data laporan
+🗺️ Google Maps SDK (via react-native-maps)
+
+ 2. Web Monitoring
+🌐 HTML, CSS, JavaScript
+🗺️ Leaflet.js → visualisasi titik laporan
+🔥 Firebase JS SDK → mengambil & menghapus data
+🗾 Google Maps JavaScript API
+
+3. Backend & Database
+🔥 Firebase Realtime Database → menyimpan laporan
+
+
+📝 Input pengguna:
+Deskripsi kerusakan
+Nama pelapor
+Foto kerusakan
+🔥 Firebase Realtime Database → sumber utama data peta
