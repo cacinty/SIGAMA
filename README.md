@@ -115,5 +115,9 @@ SIGAMA adalah aplikasi pelaporan kerusakan fasilitas kampus yang memudahkan maha
 
 
 
-https://github.com/user-attachments/assets/b0d0018c-944e-411e-97ee-f4b16ce7797d
+
+https://github.com/user-attachments/assets/9fdb50fd-ab9a-4baa-ab3b-e6b61c903b7b
+
+
+
 
